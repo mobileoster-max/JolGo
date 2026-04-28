@@ -2,203 +2,60 @@
 <html lang="ky">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>JolGo 9999: God Mode</title>
-
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3069/3069172.png">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3069/3069172.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="JolGo">
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JolGo 9999: Reborn</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1356/1356479.png">
     <style>
-        :root { --gold: #ffd700; --main: #00ff88; --bg: #000; --card: #111; --vip: linear-gradient(45deg, #ffd700, #ff8800); }
-        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Arial Black', sans-serif; }
-        
-        #auth { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; }
-        .login-box { background: #fff; color: #000; width: 85%; padding: 40px; border-radius: 40px; text-align: center; border: 6px solid var(--main); }
-        
-        .header { height: 70px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #222; position: sticky; top:0; background:#000; z-index: 100; }
-        .xp-badge { color: var(--gold); border: 2px solid var(--gold); padding: 5px 15px; border-radius: 20px; font-size: 14px; }
-
-        .page { padding: 15px; display: none; padding-bottom: 100px; animation: zoomIn 0.3s ease; }
-        .active { display: block; }
-        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .card { background: var(--card); border-radius: 25px; margin-bottom: 20px; border: 1px solid #333; overflow: hidden; }
-        .card img { width: 100%; height: 160px; object-fit: cover; }
-        
-        .badge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 15px; }
-        .badge-box { background: #1a1a1a; padding: 15px; border-radius: 20px; text-align: center; border: 1px solid #333; opacity: 0.3; filter: grayscale(1); }
-        .badge-box.unlocked { opacity: 1; filter: grayscale(0); border: 2px solid var(--gold); background: #222; }
-
-        #cert-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 20000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .cert { background: #000; border: 10px double var(--gold); padding: 30px; border-radius: 20px; text-align: center; width: 100%; box-shadow: 0 0 50px var(--gold); }
-        .gold-v { background: var(--vip); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; }
-        
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 20px; font-weight: 900; cursor: pointer; margin-top: 10px; }
-        .btn-main { background: var(--main); color: #000; }
-        
-        .nav { position: fixed; bottom: 0; width: 100%; height: 80px; background: #000; display: flex; border-top: 2px solid #222; }
-        .tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: #555; }
-        .tab.on { color: var(--main); }
-        
-        .lang-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 10px; }
-        .lang-btn { background: #222; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 10px; font-size: 10px; }
-
-        .rank-list { background: #0a0a0a; border-radius: 20px; padding: 10px; margin-top: 10px; }
-        .rank-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #222; font-size: 14px; }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 15000; display: none; flex-direction: column; padding: 30px; justify-content: center; overflow-y: auto; }
-        .opt { background: #1a1a1a; padding: 20px; margin: 10px 0; border-radius: 20px; text-align: center; border: 1px solid #444; }
+        :root { --gold: #ffd700; --main: #00ff88; --bg: #000; }
+        body { margin: 0; background: var(--bg); color: #fff; font-family: 'Arial Black', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+        #app { text-align: center; width: 90%; max-width: 400px; padding: 30px; border: 2px solid var(--main); border-radius: 20px; background: #1a1a1a; }
+        input { width: 80%; padding: 15px; margin: 20px 0; border-radius: 10px; border: none; font-size: 16px; text-align: center; }
+        button { background: var(--main); color: #000; border: none; padding: 15px 40px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-size: 18px; }
+        h1 { color: var(--gold); margin-bottom: 10px; }
+        .hidden { display: none !important; }
+        #game-screen { color: var(--main); font-size: 20px; }
     </style>
 </head>
 <body>
 
-<div id="auth">
-    <div class="login-box">
-        <h1>JolGo</h1>
-        <p>TITANIUM 9999 GOD MODE</p>
-        <input type="text" id="u-in" placeholder="NAME / АТЫҢЫЗ" style="width:80%; padding:15px; margin:20px 0; border-radius:15px; text-align:center;">
-        <button class="btn btn-main" onclick="initApp()">GO / БАШТОО</button>
-    </div>
-</div>
-
-<div class="header">
-    <div style="font-size:24px; color:var(--main)">JolGo</div>
-    <div class="xp-badge">🏆 <span id="xp-val">0</span> XP</div>
-</div>
-
-<div id="p1" class="page active">
-    <div id="list"></div>
-</div>
-
-<div id="p2" class="page">
-    <div id="map" style="height:400px; border-radius:30px; border:2px solid #333;"></div>
-</div>
-
-<div id="p3" class="page">
-    <div style="text-align:center;">
-        <h2 id="u-name" style="margin:0"></h2>
-        <h3 id="u-title" style="color:var(--gold); margin-bottom:20px;">RANK</h3>
-        
-        <div class="lang-grid">
-            <button class="lang-btn" onclick="setL('ky')">🇰🇬 KY</button>
-            <button class="lang-btn" onclick="setL('ru')">🇷🇺 RU</button>
-            <button class="lang-btn" onclick="setL('en')">🇺🇸 EN</button>
-            <button class="lang-btn" onclick="setL('ar')">🇸🇦 AR</button>
-            <button class="lang-btn" onclick="setL('zh')">🇨🇳 ZH</button>
+    <div id="app">
+        <div id="auth-screen">
+            <h1>JOLGO</h1>
+            <p>Аты-жөнүңдү жаз:</p>
+            <input type="text" id="username" placeholder="Сиздин ысымыңыз..." autocomplete="off">
+            <button onclick="startGame()">БАШТОО</button>
         </div>
 
-        <h4 id="ui-achive" style="text-align:left; color:var(--main); margin-top:20px;">🏅 ТИТУЛДАР</h4>
-        <div class="badge-grid" id="badge-display"></div>
-
-        <h4 id="ui-lead" style="text-align:left; color:var(--main); margin-top:30px;">📊 ЛИДЕРЛЕР</h4>
-        <div class="rank-list" id="rank-box"></div>
+        <div id="game-screen" class="hidden">
+            <h1 id="welcome-msg"></h1>
+            <p>🚀 Оюн ийгиликтүү жүктөлдү!</p>
+            <p>Талас картасы даяр.</p>
+            <button onclick="location.reload()">КАЙРА ЖАҢЫЛОО</button>
+        </div>
     </div>
-</div>
 
-<div id="cert-overlay">
-    <div class="cert">
-        <h1 class="gold-v" style="font-size:40px;" id="cert-head">ЗАВОЕВАТЕЛЬ</h1>
-        <p id="cert-text1">Бул жогорку даражадагы VIP сертификат берилет:</p>
-        <h2 id="cert-user" style="text-transform:uppercase; color:#fff; border-bottom: 2px solid var(--gold); display:inline-block;"></h2>
-        <p style="margin-top:20px;" id="cert-text2">Талас облусун толук багындырып, УЛУУ КӨЧМӨН статусуна жеткени үчүн!</p>
-        <div style="font-size:50px">👑👑👑</div>
-        <button class="btn btn-main" onclick="document.getElementById('cert-overlay').style.display='none'">OK!</button>
-    </div>
-</div>
-
-<div id="info-modal" class="modal">
-    <h2 id="info-n" style="color:var(--main)"></h2>
-    <p id="info-t" style="line-height: 1.6; font-size: 14px; text-align: justify;"></p>
-    <button class="btn btn-main" id="q-start">START</button>
-    <button class="btn" style="background:#333; color:#fff" onclick="closeM('info-modal')">BACK</button>
-</div>
-
-<div id="quiz-modal" class="modal">
-    <h3 id="q-txt"></h3>
-    <div id="q-opt"></div>
-</div>
-
-<div class="nav">
-    <div class="tab on" onclick="go('p1',this)" id="tab-home">🏠<br>Башкы</div>
-    <div class="tab" onclick="go('p2',this); initMap();" id="tab-map">🗺️<br>Карта</div>
-    <div class="tab" onclick="go('p3',this)" id="tab-prof">👤<br>Профиль</div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const i18n = {
-        ky: { titles:["Адам","Саякатчы","Изилдөөчү","Мастер","Легенда","УЛУУ КӨЧМӨН"], home:"Башкы", map:"Карта", prof:"Профиль", start:"ТЕСТТИ БАШТОО", back:"АРТКА", achive:"ТИТУЛДАР", lead:"ЛИДЕРЛЕР", certH:"ЗАВОЕВАТЕЛЬ", certT1:"Бул сертификат берилет:", certT2:"УЛУУ КӨЧМӨН статусуна жеткени үчүн!", err:"Ката!" },
-        ru: { titles:["Человек","Путешественник","Исследователь","Мастер","Легенда","ВЕЛИКИЙ КОЧЕВНИК"], home:"Главная", map:"Карта", prof:"Профиль", start:"НАЧАТЬ ТЕСТ", back:"НАЗАД", achive:"ТИТУЛЫ", lead:"ЛИДЕРЫ", certH:"ЗАВОЕВАТЕЛЬ", certT1:"Данный сертификат вручается:", certT2:"За достижение статуса ВЕЛИКИЙ КОЧЕВНИК!", err:"Ошибка!" },
-        en: { titles:["Human","Traveler","Explorer","Master","Legend","GREAT NOMAD"], home:"Home", map:"Map", prof:"Profile", start:"START TEST", back:"BACK", achive:"TITLES", lead:"LEADERS", certH:"CONQUEROR", certT1:"This certificate is awarded to:", certT2:"For reaching GREAT NOMAD status!", err:"Wrong!" },
-        ar: { titles:["إنسان","مسافر","مستكشف","ماهر","أسطورة","الرحالة العظيم"], home:"الرئيسية", map:"الخريطة", prof:"الملف", start:"ابدأ الاختبار", back:"رجوع", achive:"الألقاب", lead:"المتصدرين", certH:"الفاتح", certT1:"تمنح هذه الشهادة لـ:", certT2:"للوصول إلى رتبة الرحالة العظيم!", err:"خطأ!" },
-        zh: { titles:["人类","旅行者","探险家","大师","传奇","伟大的游牧民族"], home:"首页", map:"地图", prof:"个人资料", start:"开始测试", back:"返回", achive:"称号", lead:"排行榜", certH:"征服者", certT1:"此证书授予：", certT2:"感谢您获得伟大游牧民族地位！", err:"错误!" }
-    };
-
-    const playSound = (type) => {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const masterGain = ctx.createGain();
-        masterGain.connect(ctx.destination);
-        masterGain.gain.setValueAtTime(0.1, ctx.currentTime);
-
-        if(type === 'win') {
-            const notes = [523.25, 659.25, 783.99]; 
-            notes.forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const g = ctx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
-                g.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.1);
-                g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + i * 0.1 + 0.3);
-                osc.connect(g); g.connect(masterGain);
-                osc.start(ctx.currentTime + i * 0.1);
-                osc.stop(ctx.currentTime + i * 0.1 + 0.3);
-            });
-        } else {
-            const osc = ctx.createOscillator();
-            const g = ctx.createGain();
-            osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(200, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.4);
-            g.gain.setValueAtTime(0.1, ctx.currentTime);
-            g.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
-            osc.connect(g); g.connect(masterGain);
-            osc.start();
-            osc.stop(ctx.currentTime + 0.4);
+    <script>
+        function startGame() {
+            const name = document.getElementById('username').value;
+            if (name.trim() !== "") {
+                localStorage.setItem('jolgo_user', name);
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('game-screen').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = "Салам, " + name + "!";
+            } else {
+                alert("Сураныч, атыңызды жазыңыз!");
+            }
         }
-    };
 
-    const places = [
-        { id:1, n:{ky:'Манас Ордо', ru:'Манас Ордо', en:'Manas Ordo', ar:'ماناس أوردو', zh:'玛纳斯奥尔多'}, t:{ky:'Манас Урпагы', ru:'Потомок Манаса', en:'Manas Heir', ar:'سليل ماناس', zh:'玛纳斯后裔'}, desc: {ky: "Манас Ордо - кыргыз элинин эң ыйык комплекси. Бул жерде улуу баатыр Манастын күмбөзү жайгашкан.", ru: "Манас Ордо - святыня кыргызского народа. Здесь расположен гумбез великого героя Манаса.", en: "Manas Ordo is the holiest complex for the Kyrgyz people.", ar: "ماناس أوردو هو أقدس مجمع للشعب القرغيزي.", zh: "玛纳斯奥尔多是吉尔吉斯人民最神圣的建筑群。"}, x:42.52, y:72.38, q:{ky:'Күмбөз кайсы кылымга таандык?', ru:'К какому веку относится гумбез?', en:'Which century?', ar:'أي قرن؟', zh:'哪个世纪？'}, a:['14','10','18'], c:0, img:'https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=400' },
-        { id:2, n:{ky:'Беш-Таш', ru:'Беш-Таш', en:'Besh-Tash', ar:'بيش تاش', zh:'五石'}, t:{ky:'Сын Манаса', ru:'Сын Манаса', en:'Son of Manas', ar:'ابن ماناس', zh:'玛纳斯之子'}, desc: {ky: "Беш-Таш мамлекеттик коругунда 7 кооз тоо көлү бар.", ru: "Беш-Таш — государственный заповедник с 7 озерами.", en: "Besh-Tash national park with 7 lakes.", ar: "بيش تاش مع 7 بحيرات.", zh: "贝什塔什拥有 7 个湖泊。"}, x:42.33, y:72.25, q:{ky:'Беш-Ташта канча көл бар?', ru:'Сколько озер?', en:'How many lakes?', ar:'كم بحيرة؟', zh:'多少湖泊？'}, a:['3','7','12'], c:1, img:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=400' },
-        { id:3, n:{ky:'Кировка', ru:'Кировка', en:'Kirovka', ar:'كيروفكا', zh:'基洛夫卡'}, t:{ky:'Суу Башчысы', ru:'Властелин Воды', en:'Water Lord', ar:'سيد الماء', zh:'水之领主'}, desc: {ky: "Киров суу сактагычында Айтматовдун барельефтери бар.", ru: "Кировское водохранилище с барельефами Айтматова.", en: "Kirov Reservoir with Aitmatov bas-reliefs.", ar: "خزان كيروف بنقوش أيتماتوف.", zh: "基洛夫水库有艾特玛托夫的浮雕。"}, x:42.63, y:71.60, q:{ky:'Бул кайсы райондо?', ru:'В каком районе?', en:'Which district?', ar:'أي منطقة؟', zh:'哪个地区？'}, a:['Манас','Кара-Буура','Бакай-Ата'], c:1, img:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400' },
-        { id:4, n:{ky:'Шекер айылы', ru:'Село Шекер', en:'Sheker Village', ar:'قرية شيكر', zh:'谢克尔村'}, t:{ky:'Айтматовдун Издери', ru:'Следы Айтматова', en:'Aitmatov Trails', ar:'خطى أيتماتوف', zh:'艾特玛托夫步道'}, desc: {ky: "Шекер айылы - Чыңгыз Айтматовдун туулган жери.", ru: "Село Шекер — родина Чингиза Айтматова.", en: "Sheker Village is the birthplace of Chingiz Aitmatov.", ar: "قرية شيكر هي مسقط رأس جنكيز أيتماتوف.", zh: "谢克尔村是艾特玛托夫的出生地。"}, x:42.53, y:71.05, q:{ky:'Чыңгыз Айтматовдун туулган жылы?', ru:'Год рождения?', en:'Birth year?', ar:'سنة الميلاد؟', zh:'出生年份？'}, a:['1928','1930','1945'], c:0, img:'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400' },
-        { id:5, n:{ky:'Кен-Кол', ru:'Кен-Кол', en:'Ken-Kol', ar:'كين كول', zh:'肯科尔'}, t:{ky:'Гунн Сакчысы', ru:'Страж Гуннов', en:'Hun Guardian', ar:'حارس الهون', zh:'匈奴卫队'}, desc: {ky: "Кен-Кол - гунн дооруна таандык тарыхый эстелик.", ru: "Кен-Кол — памятник эпохи гуннов.", en: "Ken-Kol is a Hun-era monument.", ar: "كين كول هو نصب من عصر الهون.", zh: "肯科尔是匈奴时代的遗迹。"}, x:42.58, y:72.45, q:{ky:'Кимдердин эстелиги?', ru:'Чей памятник?', en:'Whose monument?', ar:'نصب من؟', zh:'谁的纪念碑？'}, a:['Сак','Гунн','Түрк'], c:1, img:'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400' }
-    ];
-
-    let user = JSON.parse(localStorage.getItem('jolgo_v8')) || { name:'', xp:0, solved:[], lang:'ky' };
-
-    function initApp() {
-        const n = document.getElementById('u-in').value.trim();
-        if(!n) return alert("Write Name!");
-        user.name = n;
-        document.getElementById('auth').style.display='none';
-        playSound('win');
-        updateUI();
-    }
-
-    function setL(l) { user.lang = l; updateUI(); }
-
-    function updateUI() {
-        const lang = user.lang;
-        const dict = i18n[lang];
-        document.getElementById('u-name').innerText = user.name;
-        document.getElementById('xp-val').innerText = user.xp;
-        let tIdx = Math.min(Math.floor(user.xp / 1000), 5);
-        document.getElementById('u-title').innerText = dict.titles[tIdx];
-        document.getElementById('tab-home').innerHTML = `🏠<br>${dict.home}`;
-        document.getElementById('tab-map').innerHTML = `🗺️<br>${dict.map}`;
-        document.getElementById('tab-prof').innerHTML = `👤<br>${dict.prof}`;
-        document.getElementById
+        // Эгер мурун кирген болсо, дароо оюнду көрсөтүү
+        window.onload = () => {
+            const savedName = localStorage.getItem('jolgo_user');
+            if (savedName) {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('game-screen').classList.remove('hidden');
+                document.getElementById('welcome-msg').innerText = "Салам, " + savedName + "!";
+            }
+        };
+    </script>
+</body>
+</html>
